@@ -1,0 +1,74 @@
+--- IDE & Build System ---
+
+*.iml
+.idea/
+.gradle/
+build/
+**/build/
+local.properties
+
+--- Android ---
+
+Build Artifacts
+
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+
+Android Studio Generated
+
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+output-metadata.json
+
+Profiling
+
+*.hprof
+
+Keystores & Secrets
+
+*.jks
+*.keystore
+google-services.json
+
+--- Kotlin Multiplatform ---
+
+.kotlin/
+*.kexe
+*.knm
+*.kib
+*.klib
+
+--- iOS / Xcode ---
+
+.DS_Store
+
+User-specific Xcode data
+
+xcuserdata/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+CocoaPods (if used)
+
+Pods/
+Podfile.lock
+
+--- Fastlane (Optional) ---
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+--- Node/JS (if used) ---
+
+node_modules/

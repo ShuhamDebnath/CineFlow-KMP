@@ -1,6 +1,7 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -10,11 +11,10 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.buildConfig)
 }
 
 kotlin {
-
-    applyDefaultHierarchyTemplate()
 
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -84,10 +84,14 @@ kotlin {
             implementation(libs.androidx.room.sqlite.wrapper)
         }
 
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+
     }
 }
 
@@ -102,6 +106,11 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    buildFeatures {
+        buildConfig = false
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -129,10 +138,26 @@ room {
 
 // --- KSP Configuration (for Room) ---
 dependencies {
+    implementation(libs.androidx.room.compiler)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
     // Add any other platform target you use in your project, for example kspDesktop
+}
+
+
+buildConfig {
+    packageName("com.shuham.cineflow_kmp")
+
+    val localProperties = Properties()
+    val localFile = rootProject.file("local.properties")
+    if (localFile.exists()) {
+        localProperties.load(localFile.inputStream())
+    }
+
+    val apiKey = localProperties.getProperty("TMDB_API_KEY") ?: ""
+
+    buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
 }
 

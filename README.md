@@ -1,84 +1,126 @@
 🎬 CineFlow KMP
 ===============
+![Kotlin](https://img.shields.io/badge/Kotlin-100%25-orange?style=for-the-badge&logo=kotlin)
+![Compose Multiplatform](https://img.shields.io/badge/UI-Compose%20Multiplatform-blue?style=for-the-badge&logo=jetpackcompose)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
+**CineFlow** is a high-performance movie discovery application built with **Kotlin Multiplatform (KMP)**. It demonstrates how to share 100% of business logic and 90%+ of UI code between Android and iOS without sacrificing native performance.
 
-**CineFlow KMP** is a modern Movie Discovery App built with **Kotlin Multiplatform (KMP)**, sharing logic and UI between **Android** and **iOS**. It demonstrates industry-standard practices including Clean Architecture, MVVM, and Offline-First data synchronization.
+> **"Stop building bridges. Start building native."** > This project serves as a proof-of-concept for modern mobile development, utilizing a Single Source of Truth (SSOT) architecture, offline-first caching, and Declarative UI.
+
+
+📱 Screenshots
+--------------
+|                             Home                              |                             Detail                             |
+|:-------------------------------------------------------------:|:--------------------------------------------------------------:|
+| <img src="./screenshot/home.png" width="400" alt="Main Menu"> | <img src="./screenshot/detail.png" width="400" alt="Gameplay"> |
+
+
 
 🚀 Tech Stack
 -------------
 
--   **Language:** Kotlin (100%)
+*   **Core:** Kotlin Multiplatform (KMP)
 
--   **UI:** Compose Multiplatform (Material 3)
+*   **UI Framework:** Compose Multiplatform (Material 3)
 
--   **Architecture:** Clean Architecture (Presentation -> Domain -> Data) + MVVM
+*   **Architecture:** Clean Architecture + MVVM
 
--   **Networking:** Ktor 3.0 (Content Negotiation, Logging)
+*   **Networking:** Ktor 3.0 (ContentNegotiation, Logging, CIO Engine)
 
--   **Database:** Room KMP (Offline Caching)
+*   **Database:** Room KMP (SQLite Driver for native persistence)
 
--   **Dependency Injection:** Koin 4.0
+*   **Dependency Injection:** Koin 4.0
 
--   **Image Loading:** Coil 3.0
+*   **Image Loading:** Coil 3.0 (Async image loading with caching)
 
--   **Navigation:** Jetbrains Navigation Compose
+*   **Concurrency:** Coroutines & Flow
 
--   **Asynchronous:** Coroutines & Flow
+*   **Navigation:** Jetbrains Navigation Compose
 
-✨ Features
-----------
 
--   **Discover Movies:** Browse Popular and Top Rated movies.
+✨ Key Features
+--------------
 
--   **Search:** Find movies by title.
+*   **Cross-Platform UI:** A single Compose codebase rendering native UI on both Android and iOS.
 
--   **Offline First:** Caches data locally using Room; app works without internet.
+*   **Real-time Discovery:** Fetches "Now Playing," "Popular," and "Top Rated" movies via TMDB API.
 
--   **Details:** View movie overview, release date, and rating.
+*   **Offline-First:** Robust caching strategy using Room. App remains fully functional without internet.
 
--   **Dark/Light Mode:** Fully supported by Material 3.
+*   **Search Implementation:** Optimized local search through cached data.
 
-🛠️ Setup & Run
----------------
+*   **Reactive State Management:** Uses StateFlow and collectAsStateWithLifecycle for lifecycle-aware UI updates.
 
-### Prerequisites
+*   **Adaptive Theming:** Fully supports Dark/Light mode based on system settings.
 
--   Android Studio Ladybug (or newer)
-
--   Xcode 15+ (for iOS)
-
--   JDK 17 or 21
-
-[TMDB API Key](https://www.themoviedb.org/documentation/api "null")
-
-### Steps
-
-1.  Clone the repo:
-
-    ```
-    git clone [https://github.com/ShuhamDebnath/CineFlow-KMP.git](https://github.com/ShuhamDebnath/CineFlow-KMP.git)
-
-    ```
-
-2.  Open `composeApp/src/commonMain/kotlin/com/cineflow/utils/Constants.kt` and add your TMDB API Key.
-
-3.  Sync Gradle project.
-
-4.  **Android:** Select `composeApp` configuration and run on an Emulator.
-
-5.  **iOS:** Open `iosApp/iosApp.xcodeproj` in Xcode or run via KMP plugin in Android Studio.
 
 🏗️ Architecture
 ----------------
 
-The app follows **Clean Architecture** with strict separation of concerns:
+The project follows a strict **Clean Architecture** pattern to ensure separation of concerns and testability.
 
-1.  **Data Layer:** API (Ktor), Database (Room), and Repository Implementation.
+```
+commonMain
+├── domain          # Pure Kotlin (No Frameworks)
+│   ├── models      # Data classes
+│   ├── repository  # Interfaces
+│   └── usecases    # Business Logic
+├── data            # Framework Implementation
+│   ├── local       # Room Entities & DAO
+│   ├── remote      # Ktor DTOs & Service
+│   └── repository  # Repository Implementation
+└── presentation    # UI & State
+    ├── components  # Shared Composables
+    ├── screens     # Feature Screens
+    └── viewmodel   # State Holders
 
-2.  **Domain Layer:** Use Cases and Repository Interfaces (Pure Kotlin, no android/compose dependencies).
+```
+🛠️ Setup & Configuration
+-------------------------
 
-3.  **Presentation Layer:** ViewModels (MVVM) and Composable UI.
+### Prerequisites
 
-📄 License
-----------
+-   **Android Studio:** Ladybug (or newer)
 
-This project is for educational purposes. Data provided by [TMDB](https://www.themoviedb.org/ "null").
+-   **Xcode:** 15+ (Required for iOS target)
+
+-   **JDK:** 17 or 21
+
+-   **TMDB API Key:** [Get it here](https://www.themoviedb.org/documentation/api "null")
+
+### Installation
+
+1.  **Clone the repository:**
+
+    ```
+    git clone [https://github.com/ShuhamDebnath/CineFlow-KMP.git](https://github.com/ShuhamDebnath/CineFlow-KMP.git)
+    cd CineFlow-KMP
+
+    ```
+
+2.  **Secure API Key Setup:** This project uses `local.properties` to secure API keys.
+
+    -   Open (or create) the `local.properties` file in the root directory.
+
+    -   Add your key:
+
+        ```
+        TMDB_API_KEY=your_actual_api_key_here
+
+        ```
+
+3.  **Run the App:**
+
+    -   **Android:** Select `composeApp` configuration and run on an Emulator/Device.
+
+    -   **iOS:** Open `iosApp/iosApp.xcodeproj` in Xcode OR run directly via the KMP plugin in Android Studio.
+
+
+
+🛠️ Setup & Configuration
+-------------------------
+
+Built by **Shuham Debnath** — Android Developer & KMP Enthusiast.
+
+_Licensed under MIT._
